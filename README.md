@@ -91,6 +91,5 @@ Reference
 ---------
 
 
-    [Action Elimination and Stopping Conditions for the
-Multi-Armed Bandit and Reinforcement Learning Problems](http://jmlr.csail.mit.edu/papers/volume7/evendar06a/evendar06a.pdf)
+[Action Elimination and Stopping Conditions for the Multi-Armed Bandit and Reinforcement Learning Problems](http://jmlr.csail.mit.edu/papers/volume7/evendar06a/evendar06a.pdf)
 
