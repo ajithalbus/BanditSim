@@ -3,6 +3,7 @@ from algorithms import runEpsilonGreedy,runSoftMax,runUCB,runMedianElimination
 import argparse
 import sys
 import time
+import os
 
 def checkArgs(args=None):
     parser = argparse.ArgumentParser(description='Bandit alogorithms')
@@ -29,7 +30,9 @@ def load_weights():
 
 if __name__ == "__main__":
     start_time = time.time()
-
+    
+    if not os.path.exists('./plots'):
+        os.makedirs('./plots')
     args = checkArgs(sys.argv[1:])
     if args.algo=='eg':
         runEpsilonGreedy( k=int(args.k),steps=int(args.steps),eps=map(float,args.para.split(',')),exps=int(args.exps))
@@ -39,4 +42,5 @@ if __name__ == "__main__":
         runUCB( k=int(args.k),steps=int(args.steps),C=map(float,args.para.split(',')),exps=int(args.exps))
     elif args.algo=='me':
         runMedianElimination(k=int(args.k),eps=map(float,args.pacEPSILON.split(',')),delta=float(args.pacDELTA),exps=int(args.exps))
+    print 'plots saved in ./plots'
     print "-- Running Time : %s s --" % (time.time() - start_time)

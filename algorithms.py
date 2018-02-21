@@ -2,12 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 from testbed import Testbed
+import progressbar 
+
 # coding: utf-8
 
 # In[1]:
-
-
-        
+#extras
 
 
 # In[3]:
@@ -58,15 +58,20 @@ class EpsilonGreedy:
 def runEpsilonGreedy(k=10,steps=1000,eps=[0.1],exps=2000):
     rev_avgs=[] #stores average rewards 
     oa_avgs=[] #stores optimal action % avgs
+    bar = progressbar.ProgressBar(maxval=exps*len(eps), widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
+    runs=0    
     for epsilon in eps:
         rewards=[]
         optimalActions=[]
         for i in range(exps):
-            print i
+            bar.update((runs*exps)+i+1)
+            #print i
             epsilonGreedy=EpsilonGreedy(epsilon=epsilon,steps=steps,k=k)
             reward,optimalAction=epsilonGreedy.run()
             rewards.append(reward)
             optimalActions.append(optimalAction)
+        runs+=1
         rewards=np.array(rewards)
         optimalActions=np.array(optimalActions)
         rev_avgs.append(np.mean(rewards,axis=0))
@@ -75,6 +80,8 @@ def runEpsilonGreedy(k=10,steps=1000,eps=[0.1],exps=2000):
         plt.plot(range(steps),rev_avgs[-1],'-',label=r'$\epsilon=$'+str(epsilon))
         plt.figure(2)
         plt.plot(range(steps),oa_avgs[-1]*100,'-',label=r'$\epsilon=$'+str(epsilon))
+
+    bar.finish()
     plt.title(r'$\epsilon$-greedy Algorithm')    
     plt.xlabel('steps')
     plt.ylabel('% Optimal Action')
@@ -132,15 +139,19 @@ class SoftMax:
 def runSoftMax(k=10,steps=1000,exps=2000,tau=[0.1]):
     rev_avgs=[]
     oa_avgs=[]
+    bar = progressbar.ProgressBar(maxval=exps*len(tau), widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
+    runs=0
     for temp in tau:
         rewards=[]
         optimalActions=[]
         for i in range(exps):
+            bar.update((runs*exps)+i+1)
             softmax=SoftMax(temp=temp,steps=steps,k=k)
             reward,optimalAction=softmax.run()
             rewards.append(reward)
             optimalActions.append(optimalAction)
-            
+        runs+=1    
         rewards=np.array(rewards)
         optimalActions=np.array(optimalActions)
         rev_avgs.append(np.mean(rewards,axis=0))
@@ -149,7 +160,7 @@ def runSoftMax(k=10,steps=1000,exps=2000,tau=[0.1]):
         plt.plot(range(steps),rev_avgs[-1],'-',label=r'$\tau=$'+str(temp))
         plt.figure(2)
         plt.plot(range(steps),oa_avgs[-1]*100,'-',label=r'$\tau=$'+str(temp))
-
+    bar.finish()
     plt.title('Softmax Algorithm')    
     plt.xlabel('steps')
     plt.ylabel('% Optimal Action')
@@ -205,17 +216,24 @@ class UCB1:
 # In[ ]:
 
 def runUCB(k=10,steps=1000,C=[1],exps=2000):
+    print 'Please Ignore the warnings below'
     rev_avgs=[]
     oa_avgs=[]
+    bar = progressbar.ProgressBar(maxval=exps*len(C), widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
+    runs=0    
+    
     for c in C:
         rewards=[]
         optimalActions=[]
+        
         for i in range(exps):
+            bar.update((runs*exps)+i+1)
             ucb=UCB1(c=c,steps=steps,k=k)
             reward,optimalAction=ucb.run()
             rewards.append(reward)
             optimalActions.append(optimalAction)
-            
+        runs+=1    
         rewards=np.array(rewards)
         optimalActions=np.array(optimalActions)
         rev_avgs.append(np.mean(rewards,axis=0))
@@ -224,7 +242,7 @@ def runUCB(k=10,steps=1000,C=[1],exps=2000):
         plt.plot(range(steps),rev_avgs[-1],'-',label='c='+str(c))
         plt.figure(2)
         plt.plot(range(steps),oa_avgs[-1]*100,'-',label='c='+str(c))
-    
+    bar.finish()
     plt.title('UCB1 Algorithm')    
     plt.xlabel('steps')
     plt.ylabel('% Optimal Action')
@@ -297,30 +315,37 @@ class MedianElimination:
 # In[15]:
 
 def runMedianElimination(k=10,eps=[0.5],delta=0.1,exps=2000):
+    bar = progressbar.ProgressBar(maxval=exps*len(eps), widgets=[progressbar.Bar('=', '[', ']'), ' ', progressbar.Percentage()])
+    bar.start()
+    runs=0    
+    
     rev_avgs=[]
     oa_avgs=[]
     for epsilon in eps:
         rewards=[]
         optimalActions=[]
         for i in range(exps):
+            bar.update((runs*exps)+i+1)
             medianElimination=MedianElimination(k=k,epsilon=epsilon,delta=delta)
             reward,optimalAction=medianElimination.run()
             rewards.append(reward)
             optimalActions.append(optimalAction)
             #print reward
+        runs+=1
         rewards=np.array(rewards)
         optimalActions=np.array(optimalActions)
         rev_avgs.append(np.mean(rewards,axis=0))
         oa_avgs.append(np.mean(optimalActions,axis=0))
         plt.figure(1)
         plt.plot(range(len(rev_avgs[-1])),rev_avgs[-1],'-',label='epsilon='+str(epsilon))
-        plt.figure(2)
-        plt.plot(range(len(oa_avgs[-1])),oa_avgs[-1]*100,'-',label='epsilon='+str(epsilon))
-    plt.title(r"Median elimination algorithm $\delta=$"+str(delta))    
-    plt.xlabel('steps')
-    plt.ylabel('% Optimal Action')
-    plt.legend()
-    plt.savefig('./plots/4b.eps',format='eps')
+        #plt.figure(2)
+        #plt.plot(range(len(oa_avgs[-1])),oa_avgs[-1]*100,'-',label='epsilon='+str(epsilon))
+    bar.finish()
+    #plt.title(r"Median elimination algorithm $\delta=$"+str(delta))    
+    #plt.xlabel('steps')
+    #plt.ylabel('% Optimal Action')
+    #plt.legend()
+    #plt.savefig('./plots/4b.eps',format='eps')
 
     plt.figure(1)
     plt.title(r"Median elimination algorithm $\delta=$"+str(delta))    
