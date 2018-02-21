@@ -6,15 +6,15 @@ Command Line Arguments
 
 Example:  $python run.py --algo eg --para 0.1,0.01 --exps 2000 --steps 1000 --k 10
 
---algo eg | sm | ucb | me
+    --algo eg | sm | ucb | me
 
-    '''
-    eg : Epsilon-Greedy
-    sm : Softmax
-    ucb: UCB1
-    me : Median Elimination Algorithm
-    Default - eg
-    '''
+    
+        eg : Epsilon-Greedy
+        sm : Softmax
+        ucb: UCB1
+        me : Median Elimination Algorithm
+        Default - eg
+    
 
 --para parameters for the algorithm [seperated by commas if multiple]
     eg : epsilon value(s)
